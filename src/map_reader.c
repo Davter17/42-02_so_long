@@ -11,10 +11,6 @@
 /* ************************************************************************** */
 
 #include "../inc/so_long.h"
-#include <fcntl.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include "libft.h"
 
 static int	map_lines(char *map_name)
 {
@@ -91,29 +87,28 @@ static void	fill_map(char *map_name, char **map)
 	close(fd);
 }
 
-char	**map_reader(char *map_name)
+bool	map_reader(char *map_name, t_game *game)
 {
-	char	**map;
 	char	*route_map;
 	int		count_lines;
 	size_t	len;
 
 	if (!(ft_strnstr(".ber", &map_name[ft_strlen(map_name) - 4], 4)))
-		return (NULL);
+		return (0);
 	len = ft_strlen("maps/") + ft_strlen(map_name) + 1;
 	route_map = malloc(len * sizeof(char));
 	if (!route_map)
-		return (NULL);
+		return (0);
 	route_map[0] = '\0';
 	ft_strlcat(route_map, "maps/", len);
 	ft_strlcat(route_map, map_name, len);
 	count_lines = map_lines(route_map);
 	if (count_lines == -1)
-		return (free(route_map), NULL);
-	map = malloc((count_lines + 1) * sizeof(char *));
-	if (!map)
-		return (free(route_map), NULL);
-	fill_map(route_map, map);
+		return (free(route_map), 0);
+	game->map = malloc((count_lines + 1) * sizeof(char *));
+	if (!game->map)
+		return (free(route_map), 0);
+	fill_map(route_map, game->map);
 	free(route_map);
-	return (map);
+	return (1);
 }

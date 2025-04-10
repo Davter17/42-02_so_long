@@ -12,17 +12,13 @@
 
 #include "../inc/so_long.h"
 
-static t_position	*find_player(char **map)
+static void	find_player(char **map, t_game *game)
 {
 	int	i;
 	int	j;
-	t_position	*player;
 	
 	i = 0;
 	j = 0;
-	player = malloc(sizeof(t_position));
-	if (!player)
-		return (NULL);
 	while (map[i])
 	{
 		j = 0;
@@ -30,15 +26,15 @@ static t_position	*find_player(char **map)
 		{
 			if (map[i][j] == 'P')
 			{
-				player->y = i;
-				player->x = j;
-				return (player);
+				game->player_y = i;
+				game->player_x = j;
+				return ;
 			}
 			j++;
 		}
 		i++;
 	}
-	return (NULL);
+	return ;
 }
 
 int	flood_fill(char **map, int y, int x)
@@ -60,24 +56,16 @@ int	flood_fill(char **map, int y, int x)
 	return (collectable);
 }
 
-bool map_checker(char **map, int collectables)
+bool map_checker(t_game *game)
 {
-	t_position	*player;
 	char		**map2;
 	int			reachables;
 
-	map2 = ft_matrix_duplicate(map);
-	player = find_player(map2);
-	if (!player)
-	{
-		ft_matrix_free(map2);
-		exit(1);
-	}
-	reachables = flood_fill(map2, player->y, player->x);
-	free(player);
+	map2 = ft_matrix_duplicate(game->map);
+	find_player(map2, game);
+	reachables = flood_fill(map2, game->player_y, game->player_x);
 	ft_matrix_free(map2);
-	ft_printf("Rea: %i Col: %i\n", reachables, collectables);
-	if (reachables == collectables + 1)
+	if (reachables == game->collectables + 1)
 		return (1);
 	ft_printf("Error\n");
 	return (0);
