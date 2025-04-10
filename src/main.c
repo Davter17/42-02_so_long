@@ -15,7 +15,6 @@
 int	main(int argc, char **argv)
 {
 	char	**map;
-	int		i;
 	int		collectables;
 	//void	*mlx
 
@@ -24,15 +23,15 @@ int	main(int argc, char **argv)
 	map = map_reader(argv[1]);
 	if (!map)
 		return (1);
-	i = 0;
-	//mlx = mlx_init();
-	collectables = map_validate(map);
+	collectables = map_validate(map);;
 	if (collectables == 0)
 		return (ft_matrix_free(map), 1);
-	map_checker(map, collectables);
+	if (!map_checker(map, collectables))
+		return (ft_matrix_free(map), 1);
 	ft_matrix_free(map);
 	return (0);
 	
+	//mlx = mlx_init();
 	//mlx_loop_hook(mlx, mi_funcion_loop, );
 	
 }

@@ -21,7 +21,7 @@ static int	validate_chars(char **map, bool ini, bool exi, int collectables)
 	while (map[i])
 	{
 		j = 0;
-		while (map[i][j])
+		while (map[i][j + 1])
 		{
 			if (map[i][j] == 'C')
 				collectables++;
@@ -71,7 +71,7 @@ static bool	validate_limits(char **map, int len)
 	while (map[i])
 	{
 		j = 0;
-		while (map[i][j])
+		while (j <= len)
 		{
 			if ((i == 0 || j == 0 || j == len) && map[i][j] != '1')
 				return (0);
@@ -81,7 +81,7 @@ static bool	validate_limits(char **map, int len)
 	}
 	i--;
 	j = 0;
-	while (map[i][j])
+	while (j < len)
 	{
 		if (map[i][j] != '1')
 			return (0);
@@ -97,9 +97,10 @@ int	map_validate(char **map)
 	int			collectables;
 
 	len = validate_square(map);
+	
 	if (!len)
 		return (ft_printf("Error\n"), 0);
-	if (!validate_limits(map, len))
+	if (!validate_limits(map, len - 1))
 		return (ft_printf("Error\n"), 0);
 	collectables = validate_chars(map, false, false, 0);
 	if (collectables == 0)

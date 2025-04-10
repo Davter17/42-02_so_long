@@ -21,7 +21,7 @@ OBJDIR = obj
 OBJS = $(SRCS:.c=.o)
 OBJS := $(addprefix $(OBJDIR)/, $(notdir $(OBJS)))
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Wextra -Werror -fPIC
 CC = cc
 
 LIBFT_DIR = libft

@@ -11,6 +11,10 @@
 /* ************************************************************************** */
 
 #include "../inc/so_long.h"
+#include <fcntl.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include "libft.h"
 
 static int	map_lines(char *map_name)
 {
@@ -33,13 +37,31 @@ static int	map_lines(char *map_name)
 	return (count_lines);
 }
 
-static void	remove_newline(char *line)
+static char	*normalize_line(char *line)
 {
-	int	len;
+	int		len;
+	char	*new_line;
 
 	len = ft_strlen(line);
 	if (len > 0 && line[len - 1] == '\n')
+	{
 		line[len - 1] = '\0';
+		return (line);
+	}
+	else
+	{
+		new_line = malloc(len + 2);
+		if (!new_line)
+		{
+			free(line);
+			return (NULL);
+		}
+		ft_strlcpy(new_line, line, len + 1);
+		new_line[len] = '\n';
+		new_line[len + 1] = '\0';
+		free(line);
+		return (new_line);
+	}
 }
 
 static void	fill_map(char *map_name, char **map)
@@ -55,13 +77,15 @@ static void	fill_map(char *map_name, char **map)
 	i = 0;
 	while (line)
 	{
-		remove_newline(line);
+		line = normalize_line(line);
+		if (!line)
+			exit(1);
 		map[i] = ft_strdup(line);
+		free(line);
 		if (!map[i])
 			exit(1);
-		free(line);
-		line = get_next_line(fd);
 		i++;
+		line = get_next_line(fd);
 	}
 	map[i] = NULL;
 	close(fd);
@@ -93,4 +117,3 @@ char	**map_reader(char *map_name)
 	free(route_map);
 	return (map);
 }
-

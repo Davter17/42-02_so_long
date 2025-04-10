@@ -76,8 +76,9 @@ bool map_checker(char **map, int collectables)
 	reachables = flood_fill(map2, player->y, player->x);
 	free(player);
 	ft_matrix_free(map2);
-	if (reachables == collectables + 1);
+	ft_printf("Rea: %i Col: %i\n", reachables, collectables);
+	if (reachables == collectables + 1)
 		return (1);
 	ft_printf("Error\n");
-	exit (0);
+	return (0);
 }
