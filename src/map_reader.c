@@ -40,24 +40,18 @@ static char	*normalize_line(char *line)
 
 	len = ft_strlen(line);
 	if (len > 0 && line[len - 1] == '\n')
-	{
-		line[len - 1] = '\0';
 		return (line);
-	}
-	else
+	new_line = malloc(len + 2);
+	if (!new_line)
 	{
-		new_line = malloc(len + 2);
-		if (!new_line)
-		{
-			free(line);
-			return (NULL);
-		}
-		ft_strlcpy(new_line, line, len + 1);
-		new_line[len] = '\n';
-		new_line[len + 1] = '\0';
 		free(line);
-		return (new_line);
+		return (NULL);
 	}
+	ft_strlcpy(new_line, line, len + 1);
+	new_line[len] = '\n';
+	new_line[len + 1] = '\0';
+	free(line);
+	return (new_line);
 }
 
 static void	fill_map(char *map_name, char **map)

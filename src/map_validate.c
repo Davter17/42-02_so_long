@@ -19,6 +19,7 @@ static bool	validate_square(char **map, t_game *game)
 	int	len;
 
 	i = 0;
+	len = 0;
 	while (map[i])
 	{
 		j = 0;
@@ -31,22 +32,27 @@ static bool	validate_square(char **map, t_game *game)
 		i++;
 	}
 	game->width = len - 1;
+	if (game->width > 60)
+		return (0);
 	game->height = i;
+	if (game->height > 31)
+		return (0);
 	return (1);
 }
 
-static bool	validate_limits(char **map, int len)
+static bool	validate_limits(t_game *game)
 {
 	int	i;
 	int	j;
 
 	i = 0;
-	while (map[i])
+	while (game->map[i])
 	{
 		j = 0;
-		while (j <= len)
+		while (j < game->width)
 		{
-			if ((i == 0 || j == 0 || j == len) && map[i][j] != '1')
+			if ((i == 0 || j == 0 || j == game->width - 1)
+				&& game->map[i][j] != '1')
 				return (0);
 			j++;
 		}
@@ -54,13 +60,12 @@ static bool	validate_limits(char **map, int len)
 	}
 	i--;
 	j = 0;
-	while (j < len)
+	while (j < game->width)
 	{
-		if (map[i][j] != '1')
+		if (game->map[i][j] != '1')
 			return (0);
 		j++;
 	}
-	i++;
 	return (1);
 }
 
@@ -97,7 +102,7 @@ bool	map_validate(t_game *game)
 {
 	if (!validate_square(game->map, game))
 		return (ft_printf("Error\n"), 0);
-	if (!validate_limits(game->map, game->width - 1))
+	if (!validate_limits(game))
 		return (ft_printf("Error\n"), 0);
 	game->collectables = validate_chars(game->map, false, false, 0);
 	if (game->collectables == 0)

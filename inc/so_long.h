@@ -18,12 +18,6 @@
 # include "../minilibx-linux/mlx.h"
 # include <stdbool.h>
 
-typedef struct s_position
-{
-	int	y;
-	int	x;
-}	t_position;
-
 typedef struct s_game
 {
 	char	**map;
@@ -46,10 +40,13 @@ typedef struct s_game
 
 bool	map_reader(char *map_name, t_game *game);
 bool	map_validate(t_game *game);
-bool 	map_checker(t_game *game);
+bool	map_checker(t_game *game);
 
 void	load_images(t_game *game);
 
 void	game_render(t_game *game);
 int		handle_key(int keycode, t_game *game);
+
+int		handle_exit(t_game *game);
+
 #endif

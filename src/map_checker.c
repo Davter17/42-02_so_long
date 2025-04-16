@@ -16,7 +16,7 @@ static void	find_player(char **map, t_game *game)
 {
 	int	i;
 	int	j;
-	
+
 	i = 0;
 	j = 0;
 	while (map[i])
@@ -44,6 +44,11 @@ int	flood_fill(char **map, int y, int x)
 	collectable = 0;
 	if (map[y][x] == 'E' || map[y][x] == 'C')
 		collectable++;
+	if (map[y][x] == 'E')
+	{
+		map[y][x] = '1';
+		return (collectable);
+	}
 	map[y][x] = '1';
 	if (map[y - 1][x] != '1')
 		collectable += flood_fill(map, y - 1, x);
@@ -56,7 +61,7 @@ int	flood_fill(char **map, int y, int x)
 	return (collectable);
 }
 
-bool map_checker(t_game *game)
+bool	map_checker(t_game *game)
 {
 	char		**map2;
 	int			reachables;

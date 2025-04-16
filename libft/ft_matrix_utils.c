@@ -52,4 +52,3 @@ char	**ft_matrix_duplicate(char **matrix)
 	matrix2[i] = NULL;
 	return (matrix2);
 }
-
