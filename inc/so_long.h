@@ -45,6 +45,8 @@ bool	map_validate(t_game *game);
 bool	map_checker(t_game *game);
 
 void	load_images(t_game *game);
+void	cleanup_images(t_game *game);
+void	init_images_null(t_game *game);
 
 void	game_render(t_game *game);
 int		handle_key(int keycode, void *param);

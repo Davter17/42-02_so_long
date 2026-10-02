@@ -19,7 +19,8 @@ SRCS = 	src/main.c \
 		src/map_checker.c \
 		src/sprites_load.c \
 		src/game_render.c \
-		src/player_moves.c
+		src/player_moves.c \
+		src/cleanup.c
 OBJDIR = obj
 OBJS = $(SRCS:.c=.o)
 OBJS := $(addprefix $(OBJDIR)/, $(notdir $(OBJS)))

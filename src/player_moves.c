@@ -38,8 +38,6 @@ int	handle_key(int keycode, void *param)
 
 	game = (t_game *)param;
 	result = 0;
-	if (!moves)
-		moves = 0;
 	if (keycode == 65307)
 		handle_exit(game);
 	else if (keycode == 119)
