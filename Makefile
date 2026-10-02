@@ -80,6 +80,7 @@ fclean: clean
 	@if [ -d "$(LIBFT_DIR)" ]; then \
 		$(MAKE) --no-print-directory fclean -C $(LIBFT_DIR) > /dev/null 2>&1; \
 	fi
+	@rm -rf .deps/
 
 re: fclean all
 
