@@ -13,10 +13,12 @@
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
-# include "../libft/libft.h"
-# include "../libft/ft_printf.h"
-# include "../minilibx-linux/mlx.h"
+# include "libft.h"
+# include "ft_printf.h"
+# include "get_next_line.h"
+# include "mlx.h"
 # include <stdbool.h>
+# include <fcntl.h>
 
 typedef struct s_game
 {
@@ -45,8 +47,8 @@ bool	map_checker(t_game *game);
 void	load_images(t_game *game);
 
 void	game_render(t_game *game);
-int		handle_key(int keycode, t_game *game);
+int		handle_key(int keycode, void *param);
 
-int		handle_exit(t_game *game);
+int		handle_exit(void *param);
 
 #endif

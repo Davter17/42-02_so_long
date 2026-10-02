@@ -1,0 +1,27 @@
+# Object files
+obj/
+*.o
+
+# Binaries
+so_long
+*.out
+
+# Libraries
+*.a
+
+# Dependencies
+.deps/
+
+# Old libft directory (now cloned from GitHub)
+libft/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*~
+*.swp
+*.swo
+.vscode/
+.idea/

@@ -66,10 +66,12 @@ bool	map_checker(t_game *game)
 	char		**map2;
 	int			reachables;
 
-	map2 = ft_matrix_duplicate(game->map);
+	map2 = ft_matrix_dup(game->map);
+	if (!map2)
+		return (0);
 	find_player(map2, game);
 	reachables = flood_fill(map2, game->player_y, game->player_x);
-	ft_matrix_free(map2);
+	ft_matrix_free(&map2);
 	if (reachables == game->collectables + 1)
 		return (1);
 	ft_printf("Error\n");

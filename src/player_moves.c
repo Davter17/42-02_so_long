@@ -30,11 +30,13 @@ static int	player_moves(t_game *game, int new_y, int new_x)
 	return (1);
 }
 
-int	handle_key(int keycode, t_game *game)
+int	handle_key(int keycode, void *param)
 {
+	t_game		*game;
 	static int	moves;
 	int			result;
 
+	game = (t_game *)param;
 	result = 0;
 	if (!moves)
 		moves = 0;

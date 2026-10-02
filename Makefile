@@ -24,43 +24,64 @@ OBJDIR = obj
 OBJS = $(SRCS:.c=.o)
 OBJS := $(addprefix $(OBJDIR)/, $(notdir $(OBJS)))
 
-CFLAGS = -Wall -Wextra -Werror -fPIC
+CFLAGS = -Wall -Wextra -Werror -fPIC -g
 CC = cc
 
-LIBFT_DIR = libft
-LIBFT = $(LIBFT_DIR)/libft.a
-INCLUDES = -Ilibft
+LIBFT_URL = https://github.com/Davter17/MyLibrary.git
+LIBFT_DIR = .deps/libft
+LIBFT_INC = $(LIBFT_DIR)/inc
+LIBFT_LIB = $(LIBFT_DIR)/libraryC.a
 
-MINILIBX = ./minilibx-linux/libmlx.a
+MINILIBX_URL = https://github.com/42Paris/minilibx-linux.git
+MINILIBX_DIR = .deps/minilibx-linux
+MINILIBX_LIB = $(MINILIBX_DIR)/libmlx.a
 
-.PHONY: all clean fclean re libft_clean libft_fclean
+INCLUDES = -I$(LIBFT_INC) -I$(MINILIBX_DIR)
 
-all: $(LIBFT) $(NAME)
+.PHONY: all clean fclean re
 
-$(NAME): $(OBJS) $(LIBFT) $(MINILIBX)
-	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT) $(MINILIBX)  -L./libft -lft -L./minilibx-linux -lmlx -lX11 -lXext -lm -o $(NAME)
-	chmod +x $(NAME)
+all: $(LIBFT_LIB) $(MINILIBX_LIB) $(OBJDIR) $(NAME)
 
-$(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+$(OBJDIR):
+	@printf "  \033[33m⚙\033[0m  Compiling %d files...\n" $(words $(OBJS))
+	@mkdir -p $(OBJDIR)
 
-$(MINILIBX):
-	@make -C minilibx-linux
+$(NAME): $(OBJS) $(LIBFT_LIB) $(MINILIBX_LIB)
+	@printf "  \033[32m✓\033[0m Compiled %d files → $(NAME)\n" $(words $(OBJS))
+	@$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT_LIB) $(MINILIBX_LIB) -lX11 -lXext -lm -o $(NAME)
 
-clean: libft_clean
-	rm -rf $(OBJDIR)
+$(LIBFT_LIB):
+	@if [ ! -d "$(LIBFT_DIR)" ]; then \
+		printf "  \033[33m⚙\033[0m  Cloning libft...\n"; \
+		git clone $(LIBFT_URL) $(LIBFT_DIR) > /dev/null 2>&1; \
+	fi
+	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) > /dev/null 2>&1
 
-fclean: clean libft_fclean
-	rm -f $(NAME)
+$(MINILIBX_LIB):
+	@if [ ! -d "$(MINILIBX_DIR)" ]; then \
+		printf "  \033[33m⚙\033[0m  Cloning minilibx-linux...\n"; \
+		git clone $(MINILIBX_URL) $(MINILIBX_DIR) > /dev/null 2>&1; \
+	fi
+	@$(MAKE) --no-print-directory -C $(MINILIBX_DIR) > /dev/null 2>&1
+
+clean:
+	@printf "  \033[31m✗\033[0m  Removing object files...\n"
+	@rm -rf $(OBJDIR)
+	@if [ -d "$(LIBFT_DIR)" ]; then \
+		$(MAKE) --no-print-directory clean -C $(LIBFT_DIR) > /dev/null 2>&1; \
+	fi
+	@if [ -d "$(MINILIBX_DIR)" ]; then \
+		$(MAKE) --no-print-directory clean -C $(MINILIBX_DIR) > /dev/null 2>&1; \
+	fi
+
+fclean: clean
+	@printf "  \033[31m✗\033[0m  Removing $(NAME)...\n"
+	@rm -f $(NAME)
+	@if [ -d "$(LIBFT_DIR)" ]; then \
+		$(MAKE) --no-print-directory fclean -C $(LIBFT_DIR) > /dev/null 2>&1; \
+	fi
 
 re: fclean all
 
-libft_clean:
-	$(MAKE) -C $(LIBFT_DIR) clean
-
-libft_fclean:
-	$(MAKE) -C $(LIBFT_DIR) fclean
-
-$(OBJDIR)/%.o: src/%.c
-	@mkdir -p $(OBJDIR)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+$(OBJDIR)/%.o: src/%.c | $(OBJDIR)
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@

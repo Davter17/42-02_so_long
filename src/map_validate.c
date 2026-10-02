@@ -78,7 +78,7 @@ static int	validate_chars(char **map, bool ini, bool exi, int collectables)
 	while (map[i])
 	{
 		j = 0;
-		while (map[i][j + 1])
+		while (map[i][j] && map[i][j] != '\n')
 		{
 			if (map[i][j] == 'C')
 				collectables++;
